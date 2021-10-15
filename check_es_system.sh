@@ -470,7 +470,7 @@ mem) # Check memory usage
     size=$(echo $esstatus | json_parse -x nodes -x jvm -x mem -x "heap_used_in_bytes")
     available=$(echo $esstatus | json_parse -x nodes -x jvm -x mem -x "heap_max_in_bytes")
   fi
-  
+
   unitcalc
   if [ -n "${warning}" ] || [ -n "${critical}" ]; then
     # Handle tresholds
@@ -528,12 +528,11 @@ readonly) # Check Readonly status on given indexes
       # Authentication required
       authlogic
       settings=$(curl -k -s --max-time ${max_time} --basic -u ${user}:${pass} ${httpscheme}://${host}:${port}/$index/_settings)
-    fi
-    if [[ -n $cert ]] || [[ -n $(echo $esstatus | grep -i authentication) ]] ; then
-      # Authentication with certificate
-      authlogic_cert
-      settings=$(curl -k -s --max-time ${max_time} -E ${cert} --key ${key} ${httpscheme}://${host}:${port}/$index/_settings)
-    fi
+      if [[ -n $cert ]] || [[ -n $(echo $esstatus | grep -i authentication) ]] ; then
+        # Authentication with certificate
+        authlogic_cert
+        settings=$(curl -k -s --max-time ${max_time} -E ${cert} --key ${key} ${httpscheme}://${host}:${port}/$index/_settings)
+      fi
       settingsrc=$?
       if [[ $settingsrc -eq 7 ]]; then
         echo "ES SYSTEM CRITICAL - Failed to connect to ${host} port ${port}: Connection refused"
@@ -799,7 +798,7 @@ cpu) # Check memory usage
     getstatus
     value=$(echo $esstatus | json_parse -x nodes -x process -x cpu -x "percent")
   fi
-  
+
   if [ -n "${warning}" ] || [ -n "${critical}" ]; then
     # Handle tresholds
     thresholdlogic
