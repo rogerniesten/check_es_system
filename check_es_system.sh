@@ -443,13 +443,13 @@ disk) # Check disk usage
     # Handle tresholds
     thresholdlogic
     if [ $size -ge $criticalsize ]; then
-      echo "ES SYSTEM CRITICAL - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM CRITICAL - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_CRITICAL
     elif [ $size -ge $warningsize ]; then
-      echo "ES SYSTEM WARNING - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM WARNING - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_WARNING
     else
-      echo "ES SYSTEM OK - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM OK - Disk usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_disk=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_OK
     fi
   else
@@ -476,13 +476,13 @@ mem) # Check memory usage
     # Handle tresholds
     thresholdlogic
     if [ $size -ge $criticalsize ]; then
-      echo "ES SYSTEM CRITICAL - Memory usage is at ${usedpercent}% ($outputsize $unit) from $availsize $unit|es_memory=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM CRITICAL - Memory usage is at ${usedpercent}% ($outputsize $unit) from $availsize $unit|es_memory=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_CRITICAL
     elif [ $size -ge $warningsize ]; then
-      echo "ES SYSTEM WARNING - Memory usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_memory=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM WARNING - Memory usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_memory=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_WARNING
     else
-      echo "ES SYSTEM OK - Memory usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_memory=${size}B;${warningsize}B;${criticalsize}B;;"
+      echo "ES SYSTEM OK - Memory usage is at ${usedpercent}% ($outputsize $unit from $availsize $unit)|es_memory=${size}B;${warningsize};${criticalsize};;"
       exit $STATE_OK
     fi
   else
@@ -803,15 +803,19 @@ cpu) # Check memory usage
     # Handle tresholds
     thresholdlogic
     if [ $value -ge $critical ]; then
-      echo "ES SYSTEM CRITICAL - CPU usage is at ${value}% |${warning};${critical};"
+      echo "ES SYSTEM CRITICAL - CPU usage is at ${value}% |es_cpu=${value}%;${warning};${critical};"
       exit $STATE_CRITICAL
     elif [ $value -ge $warning ]; then
-      echo "ES SYSTEM WARNING - CPU usage is at ${value}% |${warning};${critical};"
+      echo "ES SYSTEM WARNING - CPU usage is at ${value}% |es_cpu=${value}%;${warning};${critical};"
       exit $STATE_WARNING
     else
-      echo "ES SYSTEM OK - CPU usage is at ${value}% |${warning};${critical};"
+      echo "ES SYSTEM OK - CPU usage is at ${value}% |es_cpu=${value}%;${warning};${critical};"
       exit $STATE_OK
     fi
+  else
+    # No thresholds
+    echo "ES SYSTEM OK - CPU usage is at ${value}% |es_cpu=${value}%"
+    exit $STATE_OK
   fi
   ;;
 
